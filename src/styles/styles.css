@@ -1,0 +1,72 @@
+a {
+	text-decoration: none;
+}
+body {
+	padding: 20px 40px;
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.logo {
+			width: 200px;
+			height: 100px;
+			background-color: #cdcdcd;
+		}
+		.links > a {
+			margin-right: 30px;
+			text-decoration: none;
+			color: peru;
+		}
+	}
+	.list {
+		display: flex;
+		gap: 20px;
+		width: 100%;
+		overflow-x: scroll;
+		.listItem {
+			min-width: 300px;
+			text-align: center;
+			border-radius: 20px;
+			border: 1px solid #cdcdcd;
+			margin: 30px auto;
+			p {
+				text-align: center;
+			}
+		}
+		.inActiveFilter {
+			background-color: transparent;
+		}
+		.activeFilter {
+			background-color: rosybrown;
+		}
+	}
+	.bookCard {
+		text-align: center;
+		.cardContent {
+			display: flex;
+			border: 1px solid #dedede;
+			padding: 20px;
+			margin: 20px;
+
+			.bookImgWrapper {
+				width: 100%;
+				margin-right: 40px;
+				height: 300px;
+				margin-bottom: 20px;
+				img {
+					width: 100%;
+					height: 100%;
+					object-fit: contain;
+				}
+			}
+			.details {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				& a {
+					margin-right: 20px;
+				}
+			}
+		}
+	}
+}
