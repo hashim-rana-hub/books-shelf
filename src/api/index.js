@@ -17,3 +17,45 @@ export const getBookList = async () => {
 		throw error;
 	}
 };
+
+export const getuserPost = async () => {
+	try {
+		const response = await axios.get(
+			`https://jsonplaceholder.typicode.com/posts/`
+		);
+		return response?.data;
+	} catch (error) {
+		console.log("error from posts ", error);
+	}
+};
+
+export const getUsers = async () => {
+	try {
+		const data = await axios.get("https://jsonplaceholder.typicode.com/users");
+		return data?.data;
+	} catch (error) {
+		console.log("error from posts ", error);
+	}
+};
+
+export const getCommentsPerPost = async (id) => {
+	try {
+		const data = await axios.get(
+			`https://jsonplaceholder.typicode.com/posts/${id}/comments/`
+		);
+		return data?.data;
+	} catch (error) {
+		console.log("error from comments ", error);
+	}
+};
+
+export const editUserPost = async (id) => {
+	try {
+		const response = await axios.put(
+			`https://jsonplaceholder.typicode.com/posts/${id}`
+		);
+		// return response?.data;
+	} catch (error) {
+		console.log("error from posts ", error);
+	}
+};

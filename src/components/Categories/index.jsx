@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { getBookList } from "../../api";
-
 function Category({ category, activeFilter, activeFilterHandler }) {
 	return (
 		<div className="list">

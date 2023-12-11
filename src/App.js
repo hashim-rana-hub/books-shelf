@@ -1,38 +1,23 @@
-import { useState, useEffect } from "react";
-import Category from "./components/Categories";
-import List from "./components/List";
 import Header from "./components/header";
 import "./styles/styles.css";
-import { getBookList } from "./api";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
+import Posts from "./components/Posts";
+import Users from "./components/Users";
+import EditPost from "./components/EditPost";
 
 function App() {
-	const [data, setData] = useState();
-	const [activeFilter, setActiveFilter] = useState();
-
-	const activeFilterHandler = (item) => setActiveFilter(item?.list_name);
-
-	const fetchList = async () => {
-		try {
-			const apiResponse = await getBookList();
-			setData(apiResponse);
-		} catch (error) {
-			console.error("Component Error:", error.message);
-		}
-	};
-
-	useEffect(() => {
-		fetchList();
-	}, []);
 	return (
-		<div className="App">
+		<BrowserRouter>
 			<Header />
-			<Category
-				category={data?.results?.lists}
-				activeFilter={activeFilter}
-				activeFilterHandler={activeFilterHandler}
-			/>
-			<List list={data?.results?.lists} activeFilter={activeFilter} />
-		</div>
+			<Routes>
+				<Route exact path="/" element={<Home />} />
+				<Route path="/posts/:userId" element={<Posts />} />
+				<Route path="/users" element={<Users />} />
+				<Route path="/photos" element={<Posts />} />
+				<Route path="/posts/:id" element={<EditPost />} />
+			</Routes>
+		</BrowserRouter>
 	);
 }
 
