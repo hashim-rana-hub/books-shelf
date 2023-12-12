@@ -20,7 +20,7 @@ ul li {
 	color: peru;
 }
 body {
-	padding: 20px 40px;
+	padding: 20px 30px !important;
 }
 .header {
 	display: flex;
@@ -162,4 +162,42 @@ img {
 
 .post .editSection button:hover {
 	background-color: bisque;
+}
+.editFormWrapper {
+	background-color: #ccc;
+}
+.formElement {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	gap: 20px;
+	margin-bottom: 20px;
+}
+.formElement > label {
+	flex: 0 0 200px;
+}
+.formElement > input {
+	height: 50px;
+	flex: 1;
+	padding: 5px 10px;
+}
+.formElement > textArea {
+	height: 300px;
+	padding: 5px 10px;
+	flex: 1;
+}
+.editForm {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+}
+.editForm .button {
+	width: 100%;
+	text-align: center;
+}
+.editForm .button > button {
+	width: 50%;
+	margin: 30px auto;
+	height: 50px;
 }

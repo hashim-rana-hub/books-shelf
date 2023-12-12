@@ -3,23 +3,13 @@ import { getuserPost } from "../../api";
 import { useParams, useHistory, useNavigate } from "react-router-dom";
 import Comments from "../Comments";
 
-const Post = ({ data, setData }) => {
-	const [showComments, setShowComments] = useState(false);
-
-	const navigate = useNavigate();
-
+const Post = ({ data, setData, handleEditPost }) => {
 	const setPostHandler = (post, index) => {
 		const tempObj = post;
 		const newObj = { ...tempObj, seeComments: true };
 		let newArray = [...data];
 		newArray[index] = { ...newObj };
 		setData(newArray);
-		setShowComments(!showComments);
-	};
-
-	const handleEditPost = (post, index) => {
-		console.log("first ", post);
-		navigate(`/posts/${post?.id}`);
 	};
 
 	return (
@@ -34,13 +24,9 @@ const Post = ({ data, setData }) => {
 					<h3>{post.title}</h3>
 					<p>{post?.body}</p>
 					<button onClick={() => setPostHandler(post, index)}>
-						{post?.seeComments && showComments
-							? "hide comments"
-							: "see comments"}
+						{post?.seeComments ? "hide comments" : "see comments"}
 					</button>
-					{post?.seeComments && showComments ? (
-						<Comments postId={post?.id} />
-					) : null}
+					{post?.seeComments ? <Comments postId={post?.id} /> : null}
 				</div>
 			))}
 		</>
@@ -49,6 +35,7 @@ const Post = ({ data, setData }) => {
 
 const Posts = () => {
 	const [data, setData] = useState();
+	const navigate = useNavigate();
 
 	const { userId } = useParams();
 
@@ -62,13 +49,18 @@ const Posts = () => {
 			}))
 		);
 	};
+
+	const handleEditPost = (post) => {
+		navigate(`/edit-post/${post?.id}`, { state: { post } });
+	};
+
 	useEffect(() => {
 		fetchPosts();
-	}, []);
+	}, [handleEditPost]);
 
 	return (
 		<div className="posts">
-			<Post data={data} setData={setData} />
+			<Post data={data} setData={setData} handleEditPost={handleEditPost} />
 		</div>
 	);
 };

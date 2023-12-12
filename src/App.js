@@ -14,8 +14,7 @@ function App() {
 				<Route exact path="/" element={<Home />} />
 				<Route path="/posts/:userId" element={<Posts />} />
 				<Route path="/users" element={<Users />} />
-				<Route path="/photos" element={<Posts />} />
-				<Route path="/posts/:id" element={<EditPost />} />
+				<Route path="/edit-post/:postId" element={<EditPost />} />
 			</Routes>
 		</BrowserRouter>
 	);

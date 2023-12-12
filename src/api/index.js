@@ -49,12 +49,15 @@ export const getCommentsPerPost = async (id) => {
 	}
 };
 
-export const editUserPost = async (id) => {
+export const editUserPost = async (id, values) => {
 	try {
-		const response = await axios.put(
-			`https://jsonplaceholder.typicode.com/posts/${id}`
+		return await axios.patch(
+			`https://jsonplaceholder.typicode.com/posts/${id}`,
+			{
+				title: values.title,
+				body: values.body,
+			}
 		);
-		// return response?.data;
 	} catch (error) {
 		console.log("error from posts ", error);
 	}
