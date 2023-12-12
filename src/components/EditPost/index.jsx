@@ -6,14 +6,12 @@ import { editUserPost } from "../../api";
 
 const EditPost = () => {
 	const location = useLocation();
-	console.log(location);
 
 	const formik = useFormik({
 		initialValues: {
 			title: location.state.post.title,
 			body: location.state.post.body,
 		},
-		// Validation function
 		validate: (values) => {
 			const errors = {};
 
@@ -31,7 +29,7 @@ const EditPost = () => {
 		// Form submission logic
 		onSubmit: (values) => {
 			console.log("from on sbmit", values);
-			editUserPost(location.state.post.id, values);
+			editUserPost(location.state.post.id, { values });
 		},
 	});
 	return (

@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { getUsers } from "../../api";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { userContext } from "../../App";
 
 const Users = () => {
-	const [data, setData] = useState();
-	const fetchUsers = async () => {
-		const data = await getUsers();
-		setData(data);
+	const navigate = useNavigate();
+
+	const { data, setDate } = useContext(userContext);
+
+	const handleEditUser = (user) => {
+		navigate(`/edit-user/${user?.id}`, { state: { user } });
 	};
-	useEffect(() => {
-		fetchUsers();
-	}, []);
 
 	return (
 		<div className="usersList">
 			{data?.map((user) => (
 				<div key={user?.id} className="userCard">
+					<div>
+						<button onClick={() => handleEditUser(user)}>edit</button>
+						<button>dlt</button>
+					</div>
 					<h4>{user?.name}</h4>
 					<p>
 						{user?.address?.suite}

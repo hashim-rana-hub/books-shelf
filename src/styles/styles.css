@@ -113,7 +113,8 @@ img {
 	height: 100%;
 	display: grid;
 	grid-template-columns: auto auto auto auto;
-	gap: 12px;
+	gap: 20px;
+	justify-content: center;
 }
 .userCard {
 	width: 280px;
@@ -152,15 +153,18 @@ img {
 	top: 20px;
 	right: 20px;
 }
-.post .editSection button {
+button {
 	padding: 5px 10px;
 	width: 70px;
 	border-radius: 8px;
 	border: none;
 	cursor: pointer;
 }
+button:first-child {
+	margin-right: 20px;
+}
 
-.post .editSection button:hover {
+button:hover {
 	background-color: bisque;
 }
 .editFormWrapper {
@@ -192,11 +196,11 @@ img {
 	flex-direction: column;
 	padding: 20px;
 }
-.editForm .button {
+.button {
 	width: 100%;
 	text-align: center;
 }
-.editForm .button > button {
+.button > button {
 	width: 50%;
 	margin: 30px auto;
 	height: 50px;
