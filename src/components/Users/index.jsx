@@ -6,10 +6,16 @@ import { userContext } from "../../App";
 const Users = () => {
 	const navigate = useNavigate();
 
-	const { data, setDate } = useContext(userContext);
+	const { data, setData } = useContext(userContext);
 
 	const handleEditUser = (user) => {
 		navigate(`/edit-user/${user?.id}`, { state: { user } });
+	};
+
+	const handleDeleteUser = (user) => {
+		let tempData = [...data];
+		let filteredUsers = tempData?.filter((item) => item?.id !== user?.id);
+		setData(filteredUsers);
 	};
 
 	return (
@@ -17,8 +23,8 @@ const Users = () => {
 			{data?.map((user) => (
 				<div key={user?.id} className="userCard">
 					<div>
-						<button onClick={() => handleEditUser(user)}>edit</button>
-						<button>dlt</button>
+						<button onClick={() => handleEditUser(user)}>Edit</button>
+						<button onClick={() => handleDeleteUser(user)}>Delete</button>
 					</div>
 					<h4>{user?.name}</h4>
 					<p>

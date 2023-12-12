@@ -155,7 +155,7 @@ img {
 }
 button {
 	padding: 5px 10px;
-	width: 70px;
+	min-width: 70px;
 	border-radius: 8px;
 	border: none;
 	cursor: pointer;
