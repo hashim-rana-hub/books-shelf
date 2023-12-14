@@ -205,3 +205,21 @@ button:hover {
 	margin: 30px auto;
 	height: 50px;
 }
+
+.searchWrapper {
+	width: 100%;
+	text-align: center;
+	margin: 15px auto;
+}
+.searchWrapper > input {
+	width: 70%;
+	height: 30px;
+	padding: 5px;
+	padding-left: 20px;
+}
+.searchWrapper > button {
+	width: 200px !important ;
+	height: 44px !important ;
+	padding: 5px !important ;
+	margin-left: 20px;
+}

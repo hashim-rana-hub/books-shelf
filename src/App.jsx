@@ -13,14 +13,17 @@ export const userContext = createContext(null);
 
 function App() {
 	const [data, setData] = useState(null);
+	const [searched, setSearched] = useState("");
+
 	const fetchUsers = async () => {
-		const data = await getUsers();
+		const data = await getUsers(searched);
 		setData(data);
 	};
+	console.log(data);
 
 	useEffect(() => {
 		fetchUsers();
-	}, []);
+	}, [searched]);
 
 	return (
 		<userContext.Provider value={{ data, setData }}>
@@ -29,7 +32,10 @@ function App() {
 				<Routes>
 					<Route exact path="/" element={<Home />} />
 					<Route path="/posts/:userId" element={<Posts />} />
-					<Route path="/users" element={<Users />} />
+					<Route
+						path="/users"
+						element={<Users searched={searched} setSearched={setSearched} />}
+					/>
 					<Route path="/edit-user/:userId" element={<EditUser />} />
 
 					<Route path="/edit-post/:postId" element={<EditPost />} />

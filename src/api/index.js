@@ -29,9 +29,15 @@ export const getuserPost = async () => {
 	}
 };
 
-export const getUsers = async () => {
+export const getUsers = async (params) => {
+	console.log("params ", params);
 	try {
-		const data = await axios.get("https://jsonplaceholder.typicode.com/users");
+		const data = await axios.get(
+			`https://jsonplaceholder.typicode.com/users/${
+				!!params ? `?username=${params}` : ""
+			}`
+		);
+
 		return data?.data;
 	} catch (error) {
 		console.log("error from posts ", error);
