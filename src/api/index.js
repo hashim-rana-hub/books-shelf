@@ -68,3 +68,14 @@ export const editUserPost = async (id, values) => {
 		console.log("error from posts ", error);
 	}
 };
+
+export const getPaginatedPosts = async (params) => {
+	try {
+		const response = await axios.get(
+			`https://jsonplaceholder.typicode.com/posts/?_page=${params}`
+		);
+		return response?.data;
+	} catch (error) {
+		console.log("error from posts ", error);
+	}
+};

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getuserPost } from "../../api";
-import { useParams, useHistory, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Comments from "../Comments";
 
 const Post = ({ data, setData }) => {
@@ -33,7 +33,7 @@ const Post = ({ data, setData }) => {
 	);
 };
 
-const Posts = () => {
+const PostsPerUser = () => {
 	const [data, setData] = useState();
 
 	const { userId } = useParams();
@@ -60,4 +60,4 @@ const Posts = () => {
 	);
 };
 
-export default Posts;
+export default PostsPerUser;
