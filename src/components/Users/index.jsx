@@ -5,16 +5,16 @@ import { userContext } from "../../App";
 const Users = ({ searched, setSearched }) => {
 	const navigate = useNavigate();
 
-	const { data, setData } = useContext(userContext);
+	const { userData, setUserData } = useContext(userContext);
 
 	const handleEditUser = (user) => {
 		navigate(`/edit-user/${user?.id}`, { state: { user } });
 	};
 
 	const handleDeleteUser = (user) => {
-		let tempData = [...data];
+		let tempData = [...userData];
 		let filteredUsers = tempData?.filter((item) => item?.id !== user?.id);
-		setData(filteredUsers);
+		setUserData(filteredUsers);
 	};
 
 	return (
@@ -28,7 +28,7 @@ const Users = ({ searched, setSearched }) => {
 				{/* <button onClick={handleSearchUser}>Search</button> */}
 			</div>
 			<div className="usersList">
-				{data?.map((user) => (
+				{userData?.map((user) => (
 					<div key={user?.id} className="userCard">
 						<div>
 							<button onClick={() => handleEditUser(user)}>Edit</button>

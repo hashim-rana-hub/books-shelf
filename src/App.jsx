@@ -13,12 +13,12 @@ import Posts from "./components/Posts/Posts";
 export const userContext = createContext(null);
 
 function App() {
-	const [data, setData] = useState(null);
+	const [userData, setUserData] = useState(null);
 	const [searched, setSearched] = useState("");
 
 	const fetchUsers = async () => {
 		const data = await getUsers(searched);
-		setData(data);
+		setUserData(data);
 	};
 
 	useEffect(() => {
@@ -26,7 +26,7 @@ function App() {
 	}, [searched]);
 
 	return (
-		<userContext.Provider value={{ data, setData }}>
+		<userContext.Provider value={{ userData, setUserData }}>
 			<BrowserRouter>
 				<Header />
 				<Routes>

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 
 const EditUser = () => {
-	const { data, setData } = useContext(userContext);
+	const { userData, setUserData } = useContext(userContext);
 
 	const navigation = useNavigate();
 	const location = useLocation();
@@ -18,9 +18,11 @@ const EditUser = () => {
 			website: location.state.user.website,
 		},
 		onSubmit(values) {
-			const tempData = [...data];
-			let filtered = data?.find((item) => item?.id === location.state.user.id);
-			let indexOfFilteredUser = data?.findIndex(
+			const tempData = [...userData];
+			let filtered = userData?.find(
+				(item) => item?.id === location.state.user.id
+			);
+			let indexOfFilteredUser = userData?.findIndex(
 				(item) => item?.id === filtered?.id
 			);
 			tempData[indexOfFilteredUser] = {
@@ -31,7 +33,7 @@ const EditUser = () => {
 				name: values?.name,
 			};
 
-			setData(tempData);
+			setUserData(tempData);
 			navigation("/users");
 		},
 	});
