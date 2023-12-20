@@ -9,16 +9,19 @@ import { createContext, useEffect, useState } from "react";
 import { getUsers } from "./api";
 import PostsPerUser from "./components/PostsPerUser";
 import Posts from "./components/Posts/Posts";
+import Loader from "./components/Loader";
 
 export const userContext = createContext(null);
 
 function App() {
 	const [userData, setUserData] = useState(null);
 	const [searched, setSearched] = useState("");
+	const [isLoading, setIsLoading] = useState(true);
 
 	const fetchUsers = async () => {
 		const data = await getUsers(searched);
 		setUserData(data);
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
@@ -29,9 +32,19 @@ function App() {
 		<userContext.Provider value={{ userData, setUserData }}>
 			<BrowserRouter>
 				<Header />
+				{isLoading && <Loader isLoading={isLoading} />}
 				<Routes>
-					<Route exact path="/" element={<Home />} />
-					<Route path="/posts/:userId" element={<PostsPerUser />} />
+					<Route
+						exact
+						path="/"
+						element={<Home setIsLoading={setIsLoading} />}
+					/>
+					<Route
+						path="/posts/:userId"
+						element={
+							<PostsPerUser setIsLoading={setIsLoading} isLoading={isLoading} />
+						}
+					/>
 					<Route
 						path="/users"
 						element={<Users searched={searched} setSearched={setSearched} />}

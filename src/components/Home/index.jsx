@@ -3,7 +3,7 @@ import Category from "../Categories";
 import List from "../List";
 import { getBookList } from "../../api";
 
-const Home = () => {
+const Home = ({ setIsLoading }) => {
 	const [data, setData] = useState();
 	const [activeFilter, setActiveFilter] = useState();
 
@@ -11,8 +11,10 @@ const Home = () => {
 
 	const fetchList = async () => {
 		try {
+			setIsLoading(true);
 			const apiResponse = await getBookList();
 			setData(apiResponse);
+			setIsLoading(false);
 		} catch (error) {
 			console.error("Component Error:", error.message);
 		}

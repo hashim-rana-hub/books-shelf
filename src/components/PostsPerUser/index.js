@@ -33,12 +33,13 @@ const Post = ({ data, setData }) => {
 	);
 };
 
-const PostsPerUser = () => {
+const PostsPerUser = ({ setIsLoading }) => {
 	const [data, setData] = useState();
 
 	const { userId } = useParams();
 
 	const fetchPosts = async () => {
+		setIsLoading(true);
 		const data = await getuserPost();
 		const userPosts = data?.filter((post) => post?.userId === parseInt(userId));
 		setData(
@@ -47,6 +48,7 @@ const PostsPerUser = () => {
 				seeComments: false,
 			}))
 		);
+		setIsLoading(false);
 	};
 
 	useEffect(() => {
@@ -55,7 +57,7 @@ const PostsPerUser = () => {
 
 	return (
 		<div className="posts">
-			<Post data={data} setData={setData} />
+			<Post data={data} setData={setData} setIsLoading={setIsLoading} />
 		</div>
 	);
 };
