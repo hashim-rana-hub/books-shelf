@@ -3,6 +3,7 @@ import Input from "../Input/Input";
 import { useFormik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
+import { validationSchema } from "../../utils/validationSchema";
 
 const EditUser = () => {
 	const { userData, setUserData } = useContext(userContext);
@@ -17,6 +18,7 @@ const EditUser = () => {
 			phone: location.state.user.phone,
 			website: location.state.user.website,
 		},
+		validationSchema: validationSchema,
 		onSubmit(values) {
 			const tempData = [...userData];
 			let filtered = userData?.find(
@@ -46,21 +48,25 @@ const EditUser = () => {
 					label="Name"
 					value={formik.values.name}
 					handleChange={formik.handleChange("name")}
+					error={formik.touched.name && formik.errors.name}
 				/>
 				<Input
 					label="Email"
 					value={formik.values.email}
 					handleChange={formik.handleChange("email")}
+					error={formik.touched.email && formik.errors.email}
 				/>
 				<Input
 					label="Phone"
 					value={formik.values.phone}
 					handleChange={formik.handleChange("phone")}
+					disabled
 				/>
 				<Input
 					label="Website"
 					value={formik.values.website}
 					handleChange={formik.handleChange("website")}
+					error={formik.touched.website && formik.errors.website}
 				/>
 				<div className="button">
 					<button type="submit">Submit</button>

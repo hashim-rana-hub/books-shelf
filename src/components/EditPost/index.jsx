@@ -28,7 +28,6 @@ const EditPost = () => {
 
 		// Form submission logic
 		onSubmit: (values) => {
-			console.log("from on sbmit", values);
 			editUserPost(location.state.post.id, { values });
 		},
 	});

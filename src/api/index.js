@@ -30,7 +30,6 @@ export const getuserPost = async () => {
 };
 
 export const getUsers = async (params) => {
-	console.log("params ", params);
 	try {
 		const data = await axios.get(
 			`https://jsonplaceholder.typicode.com/users/${

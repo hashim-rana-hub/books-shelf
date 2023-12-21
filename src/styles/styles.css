@@ -194,9 +194,12 @@ button:hover {
 .formElement > label {
 	flex: 0 0 200px;
 }
-.formElement > input {
-	height: 50px;
+.formElement > div {
 	flex: 1;
+}
+.formElement > div > input {
+	height: 50px;
+	width: 100%;
 	padding: 5px 10px;
 }
 .formElement > textArea {

@@ -17,8 +17,6 @@ const Users = ({ searched, setSearched }) => {
 		setUserData(filteredUsers);
 	};
 
-	console.log("data ", userData);
-
 	return (
 		<>
 			<div className="searchWrapper">
