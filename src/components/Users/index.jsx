@@ -17,6 +17,8 @@ const Users = ({ searched, setSearched }) => {
 		setUserData(filteredUsers);
 	};
 
+	console.log("data ", userData);
+
 	return (
 		<>
 			<div className="searchWrapper">
@@ -25,9 +27,9 @@ const Users = ({ searched, setSearched }) => {
 					value={searched}
 					onChange={(e) => setSearched(e.target.value)}
 				/>
-				{/* <button onClick={handleSearchUser}>Search</button> */}
 			</div>
 			<div className="usersList">
+				{userData?.length === 0 && <h1>oops no user found</h1>}
 				{userData?.map((user) => (
 					<div key={user?.id} className="userCard">
 						<div>
