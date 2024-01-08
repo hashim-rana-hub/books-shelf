@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getuserPost } from "../../api";
+import { getPaginatedPosts } from "../../api";
 import { useParams, useNavigate } from "react-router-dom";
 import Comments from "../Comments";
 
@@ -40,7 +40,7 @@ const PostsPerUser = ({ setIsLoading }) => {
 
 	const fetchPosts = async () => {
 		setIsLoading(true);
-		const data = await getuserPost();
+		const data = await getPaginatedPosts();
 		const userPosts = data?.filter((post) => post?.userId === parseInt(userId));
 		setData(
 			userPosts?.map((item) => ({

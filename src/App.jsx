@@ -52,7 +52,10 @@ function App() {
 					<Route path="/edit-user/:userId" element={<EditUser />} />
 
 					<Route path="/edit-post/:postId" element={<EditPost />} />
-					<Route path="/posts" element={<Posts />} />
+					<Route
+						path="/posts"
+						element={<Posts searched={searched} setSearched={setSearched} />}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</userContext.Provider>

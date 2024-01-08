@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { getPaginatedPosts, getuserPost } from "../../api";
-import { useParams, useNavigate } from "react-router-dom";
+import { getPaginatedPosts } from "../../api";
 import Comments from "../Comments";
 import { getPages } from "../../utils/dataHelpers";
 
@@ -52,19 +51,38 @@ const Pagination = ({ seletedPage, setSelectedPage }) => {
 
 const Posts = () => {
 	const [data, setData] = useState();
-	const [seletedPage, setSeletedPage] = useState(getPages[0].page);
+	const [searchedPost, setSearchedPost] = useState("");
+	const [seletedPage, setSeletedPage] = useState(1);
 
 	const fetchPosts = async () => {
-		const data = await getPaginatedPosts(seletedPage);
-		setData(data);
+		const data = await getPaginatedPosts(seletedPage, searchedPost);
+		if (searchedPost) {
+			setSeletedPage(undefined);
+			const filteredPost = data?.filter((post) =>
+				post?.title?.includes(searchedPost)
+			);
+
+			setData(filteredPost);
+		} else setData(data);
+	};
+
+	const handleSearchedPost = (e) => {
+		setSearchedPost(e.target.value);
 	};
 
 	useEffect(() => {
 		fetchPosts();
-	}, [seletedPage]);
+	}, [seletedPage, searchedPost]);
 
 	return (
 		<>
+			<div className="searchWrapper">
+				<input
+					placeholder="search by title"
+					value={searchedPost}
+					onChange={handleSearchedPost}
+				/>
+			</div>
 			<div className="paginationWrapper">
 				<Post data={data} setData={setData} />
 			</div>

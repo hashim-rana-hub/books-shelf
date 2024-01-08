@@ -18,17 +18,6 @@ export const getBookList = async () => {
 	}
 };
 
-export const getuserPost = async () => {
-	try {
-		const response = await axios.get(
-			`https://jsonplaceholder.typicode.com/posts/`
-		);
-		return response?.data;
-	} catch (error) {
-		console.log("error from posts ", error);
-	}
-};
-
 export const getUsers = async (params) => {
 	try {
 		const data = await axios.get(
@@ -68,11 +57,14 @@ export const editUserPost = async (id, values) => {
 	}
 };
 
-export const getPaginatedPosts = async (params) => {
+export const getPaginatedPosts = async (page = 1, title) => {
 	try {
-		const response = await axios.get(
-			`https://jsonplaceholder.typicode.com/posts/?_page=${params}`
-		);
+		let POST_BASE_URL = `https://jsonplaceholder.typicode.com/posts/?${
+			page && !title ? `_page=${page}` : ""
+		}${title ? `&title=${title}` : ``}`;
+
+		const response = await axios.get(POST_BASE_URL);
+
 		return response?.data;
 	} catch (error) {
 		console.log("error from posts ", error);
