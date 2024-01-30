@@ -11,6 +11,27 @@ const EditUser = () => {
 	const navigation = useNavigate();
 	const location = useLocation();
 
+	const handleFormSubmission = (values) => {
+		const tempData = [...userData];
+		let filtered = userData?.find(
+			(item) => item?.id === location.state.user.id
+		);
+		let indexOfFilteredUser = userData?.findIndex(
+			(item) => item?.id === filtered?.id
+		);
+		tempData[indexOfFilteredUser] = {
+			...tempData[indexOfFilteredUser],
+			email: values?.email,
+			phone: values?.phone,
+			website: values?.website,
+			name: values?.name,
+		};
+		console.log("updated data ", tempData);
+		setUserData(tempData);
+		navigation(-1);
+		console.log("navigation ", navigation);
+	};
+
 	const formik = useFormik({
 		initialValues: {
 			name: location.state.user.name,
@@ -19,31 +40,13 @@ const EditUser = () => {
 			website: location.state.user.website,
 		},
 		validationSchema: validationSchema,
-		onSubmit(values) {
-			const tempData = [...userData];
-			let filtered = userData?.find(
-				(item) => item?.id === location.state.user.id
-			);
-			let indexOfFilteredUser = userData?.findIndex(
-				(item) => item?.id === filtered?.id
-			);
-			tempData[indexOfFilteredUser] = {
-				...tempData[indexOfFilteredUser],
-				email: values?.email,
-				phone: values?.phone,
-				website: values?.website,
-				name: values?.name,
-			};
-
-			setUserData(tempData);
-			navigation("/users");
-		},
+		onSubmit: handleFormSubmission,
 	});
 
 	return (
 		<div>
 			EditUser
-			<form onSubmit={formik?.handleSubmit}>
+			<form>
 				<Input
 					label="Name"
 					value={formik.values.name}
@@ -69,7 +72,7 @@ const EditUser = () => {
 					error={formik.touched.website && formik.errors.website}
 				/>
 				<div className="button">
-					<button type="submit">Submit</button>
+					<button onClick={formik.handleSubmit}>Submit</button>
 				</div>
 			</form>
 		</div>

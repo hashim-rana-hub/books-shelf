@@ -7,6 +7,15 @@ a {
 	padding: 0;
 	margin: 0;
 }
+
+.error {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: calc(100vh - 140px);
+}
+
 ul li {
 	list-style: none;
 }
@@ -243,6 +252,11 @@ button:hover {
 .paginationWrapper {
 	margin: 15px auto;
 	width: 100%;
+}
+.emptyList {
+	display: block;
+}
+.postList {
 	display: grid;
 	grid-template-columns: auto auto auto;
 }

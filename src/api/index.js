@@ -17,6 +17,16 @@ export const getBookList = async () => {
 		throw error;
 	}
 };
+export const getuserPost = async () => {
+	try {
+		const response = await axios.get(
+			`https://jsonplaceholder.typicode.com/posts/`
+		);
+		return response?.data;
+	} catch (error) {
+		console.log("error from posts ", error);
+	}
+};
 
 export const getUsers = async (params) => {
 	try {
@@ -25,10 +35,10 @@ export const getUsers = async (params) => {
 				!!params ? `?username=${params}` : ""
 			}`
 		);
-
 		return data?.data;
 	} catch (error) {
-		console.log("error from posts ", error);
+		console.log("error from users ", error?.message);
+		throw error;
 	}
 };
 
@@ -60,7 +70,7 @@ export const editUserPost = async (id, values) => {
 export const getPaginatedPosts = async (page = 1, title) => {
 	try {
 		let POST_BASE_URL = `https://jsonplaceholder.typicode.com/posts/?${
-			page && !title ? `_page=${page}` : ""
+			page ? `_page=${page}` : ""
 		}${title ? `&title=${title}` : ``}`;
 
 		const response = await axios.get(POST_BASE_URL);
@@ -68,5 +78,6 @@ export const getPaginatedPosts = async (page = 1, title) => {
 		return response?.data;
 	} catch (error) {
 		console.log("error from posts ", error);
+		throw error;
 	}
 };
