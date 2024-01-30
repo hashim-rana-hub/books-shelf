@@ -266,7 +266,6 @@ button:hover {
 	border-radius: 12px;
 	margin: 20px auto;
 	padding: 20px 30px;
-	width: 50%;
 	height: auto;
 	display: flex;
 	flex-direction: column;

@@ -8,18 +8,16 @@ import Header from "../header";
 
 const Post = ({ data, setData, errorMessage }) => {
 	const [showComments, setShowComments] = useState(false);
-	const handleShowComments = (post, index) => {
-		const tempObj = post;
-		const newObj = { ...tempObj, seeComments: true };
-		const objWithTrueSeeComment = data.find((obj) => obj.seeComments === true);
-		const tempArray = data?.map((post) => ({ ...post, seeComments: false }));
-		console.log("first ", objWithTrueSeeComment);
-		let newArray =
-			objWithTrueSeeComment !== undefined ? [...tempArray] : [...data];
-		newArray[index] = { ...newObj, seeComments: showComments ? false : true };
-		setData(newArray);
-		setShowComments((pre) => !pre);
-		console.log("temparray ", tempArray);
+
+	const handleShowComments = (index) => {
+		setData((prevData) => {
+			const updatedData = prevData.map((item, i) => ({
+				...item,
+				seeComments: i === index ? !item.seeComments : false,
+			}));
+			return updatedData;
+		});
+		setShowComments((prev) => !prev);
 	};
 
 	return (
@@ -28,7 +26,7 @@ const Post = ({ data, setData, errorMessage }) => {
 				<div className="post" key={post?.id}>
 					<h3>{post.title}</h3>
 					<p>{post?.body}</p>
-					<button onClick={() => handleShowComments(post, index)}>
+					<button onClick={() => handleShowComments(index)}>
 						{post?.seeComments ? "hide comments" : "see comments"}
 					</button>
 					{post?.seeComments ? <Comments postId={post?.id} /> : null}
