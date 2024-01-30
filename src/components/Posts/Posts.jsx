@@ -15,6 +15,7 @@ const Post = ({ data, setData, errorMessage }) => {
 				...item,
 				seeComments: i === index ? !item.seeComments : false,
 			}));
+
 			return updatedData;
 		});
 		setShowComments((prev) => !prev);
@@ -62,23 +63,25 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 	const [data, setData] = useState();
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
+	const [showPagination, setShowPagination] = useState(true);
 
 	const fetchPosts = async () => {
 		try {
 			const res = await getPaginatedPosts(seletedPage, searchedPost);
 
 			if (searchedPost) {
-				setSeletedPage(undefined);
+				setSeletedPage(1);
 				const filteredPost = res?.filter((post) =>
 					post?.title?.includes(searchedPost)
 				);
 				setErrorMessage(filteredPost.length === 0);
 				setData(filteredPost);
+				setShowPagination(false);
 			} else {
 				setSearchedPost("");
+				setShowPagination(true);
 				setData(res);
 				setErrorMessage(false);
-				setSeletedPage(1);
 			}
 		} catch (error) {
 			setErrorMessage(true);
@@ -107,7 +110,8 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 			>
 				<Post data={data} setData={setData} errorMessage={errorMessage} />
 			</div>
-			{!searchedPost && (
+
+			{showPagination && (
 				<Pagination
 					seletedPage={seletedPage}
 					setSelectedPage={setSeletedPage}

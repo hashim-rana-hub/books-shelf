@@ -26,10 +26,8 @@ const EditUser = () => {
 			website: values?.website,
 			name: values?.name,
 		};
-		console.log("updated data ", tempData);
 		setUserData(tempData);
 		navigation(-1);
-		console.log("navigation ", navigation);
 	};
 
 	const formik = useFormik({
@@ -49,27 +47,34 @@ const EditUser = () => {
 			<form>
 				<Input
 					label="Name"
+					name="name"
 					value={formik.values.name}
-					handleChange={formik.handleChange("name")}
-					error={formik.touched.name && formik.errors.name}
+					handleChange={formik.handleChange}
+					//TODO:this will be removed after review  error={formik.touched.name && formik.errors.name}
+					error={formik.errors.name}
 				/>
 				<Input
 					label="Email"
+					name="email"
 					value={formik.values.email}
-					handleChange={formik.handleChange("email")}
-					error={formik.touched.email && formik.errors.email}
+					handleChange={formik.handleChange}
+					//TODO:this will be removed after review  error={formik.touched.email && formik.errors.email}
+					error={formik.errors.email}
 				/>
 				<Input
 					label="Phone"
+					name="phone"
 					value={formik.values.phone}
-					handleChange={formik.handleChange("phone")}
+					handleChange={formik.handleChange}
 					disabled
 				/>
 				<Input
 					label="Website"
+					name="website"
 					value={formik.values.website}
-					handleChange={formik.handleChange("website")}
-					error={formik.touched.website && formik.errors.website}
+					handleChange={formik.handleChange}
+					//TODO:this will be removed after review  error={formik.touched.website && formik.errors.website}
+					error={formik.errors.website}
 				/>
 				<div className="button">
 					<button onClick={formik.handleSubmit}>Submit</button>
