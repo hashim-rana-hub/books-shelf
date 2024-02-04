@@ -6,7 +6,9 @@ export function usePostListing(page, title, setDataList) {
 		queryKey: ["posts-list", page, title],
 		queryFn: () => getPaginatedPosts(page, title),
 		enabled: true,
-		onSuccess: (data) => setDataList(data),
+		onSuccess: (data) => {
+			setDataList(data);
+		},
 	});
 }
 

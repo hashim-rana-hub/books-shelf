@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { getPaginatedPosts } from "../../api";
 import Comments from "../Comments";
 import { getPages } from "../../utils/dataHelpers";
@@ -10,18 +10,10 @@ import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
 
 const Post = ({ data, setData, errorMessage }) => {
-	const [showComments, setShowComments] = useState(false);
-
-	const handleShowComments = (index) => {
-		setData((prevData) => {
-			const updatedData = prevData.map((item, i) => ({
-				...item,
-				seeComments: i === index ? !item.seeComments : false,
-			}));
-
-			return updatedData;
-		});
-		setShowComments((prev) => !prev);
+	const handleShowComments = (post, index) => {
+		const newArray = data?.map((item) => ({ ...item, seeComments: false }));
+		newArray[index] = { ...post, seeComments: true };
+		setData(newArray);
 	};
 
 	return (
@@ -30,7 +22,7 @@ const Post = ({ data, setData, errorMessage }) => {
 				<div className="post" key={post?.id}>
 					<h3>{post.title}</h3>
 					<p>{post?.body}</p>
-					<button onClick={() => handleShowComments(index)}>
+					<button onClick={() => handleShowComments(post, index)}>
 						{post?.seeComments ? "hide comments" : "see comments"}
 					</button>
 					{post?.seeComments ? <Comments postId={post?.id} /> : null}
@@ -67,6 +59,7 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
 	const [showPagination, setShowPagination] = useState(true);
+	const myInputRef = useRef(null);
 
 	// const fetchPosts = async () => {
 	// 	try {
@@ -112,7 +105,12 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 				<input
 					placeholder="search by title"
 					value={searchedPost}
-					onChange={(e) => setSearchedPost(e.target.value)}
+					// onFocus={() => setShowPagination(false)}
+					onBlur={() => setShowPagination(true)}
+					onChange={(e) => {
+						setShowPagination(false);
+						setSearchedPost(e.target.value);
+					}}
 				/>
 			</div>
 			<Loader isLoading={data ? false : true}>
@@ -125,7 +123,7 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 					<Post data={dataList} setData={setDataList} errorMessage={error} />
 				</div>
 
-				{searchedPost && !isFetching && (
+				{showPagination && (
 					<Pagination
 						seletedPage={seletedPage}
 						setSelectedPage={setSeletedPage}
