@@ -4,46 +4,49 @@ import List from "../List";
 import { getBookList } from "../../api";
 import Error from "../Error";
 import Header from "../header";
+import { useBooksList } from "../../hooks/useBookList";
+import Loader from "../Loader";
 
 const Home = ({ setIsLoading, errorMessage, setErrorMessage }) => {
-	const [data, setData] = useState();
+	//	const [data, setData] = useState();
 	const [activeFilter, setActiveFilter] = useState();
 
 	const activeFilterHandler = (item) => setActiveFilter(item?.list_name);
 
-	const fetchList = async () => {
-		try {
-			setIsLoading(true);
-			const { results } = await getBookList();
-			setData(results);
-			setIsLoading(false);
-		} catch (error) {
-			setIsLoading(false);
-			setErrorMessage(true);
-			console.error("Component Error:", error.message);
-		}
-	};
+	const { status, data, error, isFetching } = useBooksList();
+
+	// const fetchList = async () => {
+	// 	try {
+	// 		// if (!data) {
+	// 		setIsLoading(true);
+	// 		const { results } = await getBookList();
+	// 		setData(results);
+	// 		setIsLoading(false);
+	// 		// }
+	// 	} catch (error) {
+	// 		setIsLoading(false);
+	// 		setErrorMessage(true);
+	// 		console.error("Component Error:", error.message);
+	// 	}
+	// };
 
 	useEffect(() => {
-		fetchList();
-	}, []);
-
-	useEffect(() => {
-		setActiveFilter(data?.lists[0]?.list_name);
+		setActiveFilter(data?.results?.lists[0]?.list_name);
 	}, [data]);
 
 	return (
-		<Header isLoading={!data ? true : false}>
-			<div>
+		<>
+			<Header />
+			<Loader isLoading={data ? false : true}>
 				<Category
-					category={data?.lists}
+					category={data?.results?.lists}
 					activeFilter={activeFilter}
 					activeFilterHandler={activeFilterHandler}
 				/>
-				<List list={data?.lists} activeFilter={activeFilter} />
+				<List list={data?.results?.lists} activeFilter={activeFilter} />
 				{errorMessage && <Error message={"404 could not find book list"} />}
-			</div>
-		</Header>
+			</Loader>
+		</>
 	);
 };
 

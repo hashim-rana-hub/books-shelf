@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Loader from "../Loader";
 
-function Header({ children, isLoading }) {
+function Header() {
 	return (
 		<>
 			<div className="header">
@@ -21,8 +21,6 @@ function Header({ children, isLoading }) {
 					</ul>
 				</nav>
 			</div>
-			{isLoading && <Loader />}
-			{children}
 		</>
 	);
 }

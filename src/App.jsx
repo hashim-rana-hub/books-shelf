@@ -18,20 +18,20 @@ function App() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [errorMessage, setErrorMessage] = useState(false);
 
-	const fetchUsers = async () => {
-		try {
-			const data = await getUsers(searched);
-			setUserData(data);
-			setIsLoading(false);
-		} catch (error) {
-			setErrorMessage(true);
-			console.log("error ", errorMessage, error);
-		}
-	};
+	// const fetchUsers = async () => {
+	// 	try {
+	// 		const data = await getUsers(searched);
+	// 		setUserData(data);
+	// 		setIsLoading(false);
+	// 	} catch (error) {
+	// 		setErrorMessage(true);
+	// 		console.log("error ", errorMessage, error);
+	// 	}
+	// };
 
-	useEffect(() => {
-		fetchUsers();
-	}, [searched]);
+	// useEffect(() => {
+	// 	fetchUsers();
+	// }, [searched]);
 
 	return (
 		<userContext.Provider value={{ userData, setUserData }}>

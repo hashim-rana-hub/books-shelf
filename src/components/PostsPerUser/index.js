@@ -3,8 +3,10 @@ import { getuserPost } from "../../api";
 import { useParams } from "react-router-dom";
 import Comments from "../Comments";
 import Header from "../header";
+import Loader from "../Loader";
+import { useUserPosts } from "../../hooks/usePostListing";
 
-const Post = ({ data, setData }) => {
+const Post = ({ data, setData, error }) => {
 	const setPostHandler = (post, index) => {
 		const tempObj = post;
 		const newObj = { ...tempObj, seeComments: true };
@@ -14,51 +16,56 @@ const Post = ({ data, setData }) => {
 	};
 
 	return (
-		<Header isLoading={data ? false : true}>
-			{data?.map((post, index) => (
-				<div className="post" key={post?.id}>
-					<h3>{post.title}</h3>
-					<p>{post?.body}</p>
-					<button onClick={() => setPostHandler(post, index)}>
-						{post?.seeComments ? "hide comments" : "see comments"}
-					</button>
-					{post?.seeComments ? <Comments postId={post?.id} /> : null}
-				</div>
-			))}
-		</Header>
+		<>
+			<Header />
+			<Loader isLoading={data?.length > 0 ? false : true}>
+				{data?.map((post, index) => (
+					<div className="post" key={post?.id}>
+						<h3>{post.title}</h3>
+						<p>{post?.body}</p>
+						<button onClick={() => setPostHandler(post, index)}>
+							{post?.seeComments ? "hide comments" : "see comments"}
+						</button>
+						{post?.seeComments ? <Comments postId={post?.id} /> : null}
+					</div>
+				))}
+			</Loader>
+		</>
 	);
 };
 
-const PostsPerUser = ({ setIsLoading }) => {
-	const [data, setData] = useState();
+const PostsPerUser = () => {
+	const { status, data, error, isFetching } = useUserPosts();
+	const [postsPerUser, setPostsPerUser] = useState(null);
 	const { userId } = useParams();
 
-	const fetchPosts = async () => {
-		try {
-			setIsLoading(true);
-			const data = await getuserPost();
-			const userPosts = data?.filter(
-				(post) => post?.userId === parseInt(userId)
-			);
-			setData(
-				userPosts?.map((item) => ({
+	// useEffect(() => {
+	// 	const userPosts = data?.filter((post) => post?.userId === parseInt(userId));
+	// 	setPostsPerUser(
+	// 		userPosts?.map((item) => ({
+	// 			...item,
+	// 			seeComments: false,
+	// 		}))
+	// 	);
+	// 	console.log("posts per user ", postsPerUser, "status", status);
+	// }, []);
+
+	useEffect(() => {
+		if (status === "success") {
+			const userPosts = data.filter((post) => post.userId === parseInt(userId));
+			setPostsPerUser(
+				userPosts.map((item) => ({
 					...item,
 					seeComments: false,
 				}))
 			);
-			setIsLoading(false);
-		} catch (error) {
-			console.log("error from post per page ", error.message);
+			console.log("posts per user ", postsPerUser);
 		}
-	};
-
-	useEffect(() => {
-		fetchPosts();
-	}, []);
+	}, [status]);
 
 	return (
 		<div className="posts">
-			<Post data={data} setData={setData} setIsLoading={setIsLoading} />
+			<Post data={postsPerUser} setData={setPostsPerUser} error={error} />
 		</div>
 	);
 };

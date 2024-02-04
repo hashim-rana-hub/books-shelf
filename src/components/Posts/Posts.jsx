@@ -5,6 +5,9 @@ import { getPages } from "../../utils/dataHelpers";
 import _ from "lodash";
 import Error from "../Error";
 import Header from "../header";
+import { usePostListing } from "../../hooks/usePostListing";
+import Loader from "../Loader";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const Post = ({ data, setData, errorMessage }) => {
 	const [showComments, setShowComments] = useState(false);
@@ -60,64 +63,76 @@ const Pagination = ({ seletedPage, setSelectedPage }) => {
 };
 
 const Posts = ({ errorMessage, setErrorMessage }) => {
-	const [data, setData] = useState();
+	const [dataList, setDataList] = useState();
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
 	const [showPagination, setShowPagination] = useState(true);
 
-	const fetchPosts = async () => {
-		try {
-			const res = await getPaginatedPosts(seletedPage, searchedPost);
+	// const fetchPosts = async () => {
+	// 	try {
+	// 		const res = await getPaginatedPosts(seletedPage, searchedPost);
 
-			if (searchedPost) {
-				setSeletedPage(1);
-				const filteredPost = res?.filter((post) =>
-					post?.title?.includes(searchedPost)
-				);
-				setErrorMessage(filteredPost.length === 0);
-				setData(filteredPost);
-				setShowPagination(false);
-			} else {
-				setSearchedPost("");
-				setShowPagination(true);
-				setData(res);
-				setErrorMessage(false);
-			}
-		} catch (error) {
-			setErrorMessage(true);
-			console.error("Error from posts: ", error);
-		}
-	};
+	// 		if (searchedPost) {
+	// 			setSeletedPage(1);
+	// 			const filteredPost = res?.filter((post) =>
+	// 				post?.title?.includes(searchedPost)
+	// 			);
+	// 			setErrorMessage(filteredPost.length === 0);
+	// 			setData(filteredPost);
+	// 			setShowPagination(false);
+	// 		} else {
+	// 			setSearchedPost("");
+	// 			setShowPagination(true);
+	// 			setData(res);
+	// 			setErrorMessage(false);
+	// 		}
+	// 	} catch (error) {
+	// 		setErrorMessage(true);
+	// 		console.error("Error from posts: ", error);
+	// 	}
+	// };
 
-	const handleSearchedPost = _.debounce((e) => {
-		let value = e.target.value;
-		setSearchedPost(value);
-	}, 2000);
+	const debouncedSearch = useDebounce(searchedPost, 2000);
 
-	useEffect(() => {
-		fetchPosts();
-	}, [seletedPage, searchedPost]);
+	const { status, data, error, isFetching } = usePostListing(
+		seletedPage,
+		debouncedSearch,
+		setDataList
+	);
+
+	// const handleSearchedPost = _.debounce((e) => {
+	// 	let value = e.target.value;
+	// 	setSearchedPost(value);
+	// }, 2000);
 
 	return (
-		<Header isLoading={data ? false : true}>
+		<>
+			<Header />
 			<div className="searchWrapper">
-				<input placeholder="search by title" onChange={handleSearchedPost} />
-			</div>
-			<div
-				className={`paginationWrapper ${
-					errorMessage ? "emptyList" : "postList"
-				}`}
-			>
-				<Post data={data} setData={setData} errorMessage={errorMessage} />
-			</div>
-
-			{showPagination && (
-				<Pagination
-					seletedPage={seletedPage}
-					setSelectedPage={setSeletedPage}
+				<input
+					placeholder="search by title"
+					value={searchedPost}
+					onChange={(e) => setSearchedPost(e.target.value)}
 				/>
-			)}
-		</Header>
+			</div>
+			<Loader isLoading={data ? false : true}>
+				<div
+					className={`paginationWrapper ${
+						errorMessage ? "emptyList" : "postList"
+					}`}
+				>
+					{/* <Post data={data} setData={setData} errorMessage={errorMessage} /> */}
+					<Post data={dataList} setData={setDataList} errorMessage={error} />
+				</div>
+
+				{searchedPost && !isFetching && (
+					<Pagination
+						seletedPage={seletedPage}
+						setSelectedPage={setSeletedPage}
+					/>
+				)}
+			</Loader>
+		</>
 	);
 };
 

@@ -7,6 +7,7 @@ const Input = ({
 	error,
 	disabled,
 	name,
+	placeholder,
 }) => {
 	return (
 		<div className="formElement">
@@ -22,6 +23,7 @@ const Input = ({
 						onChange={handleChange}
 						value={value}
 						disabled={disabled}
+						placeholder={placeholder}
 					/>
 					{error && <p>{error}</p>}
 				</div>

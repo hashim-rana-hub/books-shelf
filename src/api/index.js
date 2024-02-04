@@ -25,6 +25,7 @@ export const getuserPost = async () => {
 		return response?.data;
 	} catch (error) {
 		console.log("error from posts ", error);
+		throw error;
 	}
 };
 
