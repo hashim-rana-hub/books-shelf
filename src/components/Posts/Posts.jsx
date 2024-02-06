@@ -12,9 +12,11 @@ import { userContext } from "../../App";
 
 const Post = ({ data, setData, errorMessage }) => {
 	const handleShowComments = (post, index) => {
-		const newArray = data?.map((item) => ({ ...item, seeComments: false }));
-		newArray[index] = { ...post, seeComments: true };
-		setData(newArray);
+		const posts = data?.map((item, i) => ({
+			...item,
+			seeComments: i === index ? true : false,
+		}));
+		setData(posts);
 	};
 
 	return (
