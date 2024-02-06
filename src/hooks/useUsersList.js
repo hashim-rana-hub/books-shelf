@@ -4,11 +4,15 @@ import { useContext } from "react";
 import { userContext } from "../App";
 
 export function useUsersList(searchedUser) {
-	const { userData, setUserData } = useContext(userContext);
+	const { userData, setUserData, fetchApi } = useContext(userContext);
+	console.log("fetch api ", fetchApi);
 	return useQuery({
 		queryKey: ["users-list", searchedUser],
 		queryFn: () => getUsers(searchedUser),
-		enabled: !userData || searchedUser ? true : false,
-		onSuccess: (data) => setUserData(data),
+		enabled: fetchApi,
+		refetchOnWindowFocus: false,
+		onSuccess: (data) => {
+			setUserData(data);
+		},
 	});
 }

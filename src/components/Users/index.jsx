@@ -11,7 +11,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 const Users = () => {
 	const navigate = useNavigate();
 
-	const { userData, setUserData } = useContext(userContext);
+	const { userData, setUserData, setFetchApi } = useContext(userContext);
 	const [searched, setSearched] = useState("");
 
 	const debouncedSearch = useDebounce(searched, 2000);
@@ -35,7 +35,10 @@ const Users = () => {
 				<input
 					placeholder="search by username"
 					value={searched || ""}
-					onChange={(e) => setSearched(e.target.value)}
+					onChange={(e) => {
+						setSearched(e.target.value);
+						setFetchApi(true);
+					}}
 				/>
 			</div>
 			<Loader isLoading={isFetching}>

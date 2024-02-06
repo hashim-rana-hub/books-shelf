@@ -6,7 +6,7 @@ import { userContext } from "../../App";
 import { validationSchema } from "../../utils/validationSchema";
 
 const EditUser = () => {
-	const { userData, setUserData } = useContext(userContext);
+	const { userData, setUserData, setFetchApi } = useContext(userContext);
 
 	const navigation = useNavigate();
 	const location = useLocation();
@@ -27,6 +27,7 @@ const EditUser = () => {
 			name: values?.name,
 		};
 		setUserData(tempData);
+		setFetchApi(false);
 		navigation(-1);
 	};
 
@@ -50,7 +51,6 @@ const EditUser = () => {
 					name="name"
 					value={formik.values.name}
 					handleChange={formik.handleChange}
-					//TODO:this will be removed after review  error={formik.touched.name && formik.errors.name}
 					error={formik.errors.name}
 				/>
 				<Input
@@ -58,7 +58,6 @@ const EditUser = () => {
 					name="email"
 					value={formik.values.email}
 					handleChange={formik.handleChange}
-					//TODO:this will be removed after review  error={formik.touched.email && formik.errors.email}
 					error={formik.errors.email}
 				/>
 				<Input
@@ -73,7 +72,6 @@ const EditUser = () => {
 					name="website"
 					value={formik.values.website}
 					handleChange={formik.handleChange}
-					//TODO:this will be removed after review  error={formik.touched.website && formik.errors.website}
 					error={formik.errors.website}
 				/>
 				<div className="button">

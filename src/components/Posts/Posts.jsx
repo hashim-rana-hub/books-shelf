@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { getPaginatedPosts } from "../../api";
 import Comments from "../Comments";
 import { getPages } from "../../utils/dataHelpers";
@@ -8,6 +8,7 @@ import Header from "../header";
 import { usePostListing } from "../../hooks/usePostListing";
 import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
+import { userContext } from "../../App";
 
 const Post = ({ data, setData, errorMessage }) => {
 	const handleShowComments = (post, index) => {
@@ -59,7 +60,6 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
 	const [showPagination, setShowPagination] = useState(true);
-	const myInputRef = useRef(null);
 
 	// const fetchPosts = async () => {
 	// 	try {
@@ -106,14 +106,14 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 					placeholder="search by title"
 					value={searchedPost}
 					// onFocus={() => setShowPagination(false)}
-					onBlur={() => setShowPagination(true)}
+					// onBlur={() => setShowPagination(true)}
 					onChange={(e) => {
 						setShowPagination(false);
 						setSearchedPost(e.target.value);
 					}}
 				/>
 			</div>
-			<Loader isLoading={data ? false : true}>
+			<Loader isLoading={isFetching}>
 				<div
 					className={`paginationWrapper ${
 						errorMessage ? "emptyList" : "postList"
@@ -123,7 +123,7 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 					<Post data={dataList} setData={setDataList} errorMessage={error} />
 				</div>
 
-				{showPagination && (
+				{!debouncedSearch && (
 					<Pagination
 						seletedPage={seletedPage}
 						setSelectedPage={setSeletedPage}
