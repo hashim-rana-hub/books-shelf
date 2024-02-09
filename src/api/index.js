@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const getBookList = async () => {
+export const getBookList = async ({ signal }) => {
+	console.log("signal ", signal);
 	try {
 		const response = await axios.get(
 			"https://api.nytimes.com/svc/books/v3/lists/full-overview.json",
@@ -8,6 +9,7 @@ export const getBookList = async () => {
 				params: {
 					"api-key": "wzJhZX08fB0StJslRDz1nkcIgRG3qgQo",
 				},
+				signal,
 			}
 		);
 
@@ -29,12 +31,13 @@ export const getuserPost = async () => {
 	}
 };
 
-export const getUsers = async (params) => {
+export const getUsers = async (signal, params) => {
 	try {
 		const data = await axios.get(
 			`https://jsonplaceholder.typicode.com/users/${
 				!!params ? `?username=${params}` : ""
-			}`
+			}`,
+			{ signal }
 		);
 		return data?.data;
 	} catch (error) {
@@ -68,17 +71,16 @@ export const editUserPost = async (id, values) => {
 	}
 };
 
-export const getPaginatedPosts = async (page = 1, title) => {
+export const getPaginatedPosts = async (page, title, signal) => {
 	try {
 		let POST_BASE_URL = `https://jsonplaceholder.typicode.com/posts/?${
 			page ? `_page=${page}` : ""
 		}${title ? `&title=${title}` : ``}`;
 
-		const response = await axios.get(POST_BASE_URL);
+		const response = await axios.get(POST_BASE_URL, { signal });
 
 		return response?.data;
 	} catch (error) {
-		console.log("error from posts ", error);
 		throw error;
 	}
 };

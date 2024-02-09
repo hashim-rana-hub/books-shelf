@@ -8,13 +8,12 @@ import Header from "../header";
 import { usePostListing } from "../../hooks/usePostListing";
 import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
-import { userContext } from "../../App";
 
 const Post = ({ data, setData, errorMessage }) => {
 	const handleShowComments = (post, index) => {
 		const posts = data?.map((item, i) => ({
 			...item,
-			seeComments: i === index ? true : false,
+			seeComments: i === index ? !post?.seeComments : false,
 		}));
 		setData(posts);
 	};
@@ -31,7 +30,6 @@ const Post = ({ data, setData, errorMessage }) => {
 					{post?.seeComments ? <Comments postId={post?.id} /> : null}
 				</div>
 			))}
-			{errorMessage && <Error message="no post found" />}
 		</>
 	);
 };
@@ -57,48 +55,52 @@ const Pagination = ({ seletedPage, setSelectedPage }) => {
 	);
 };
 
-const Posts = ({ errorMessage, setErrorMessage }) => {
-	const [dataList, setDataList] = useState();
+const Posts = () => {
+	const [data, setData] = useState();
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
+	const [errorMessage, setErrorMessage] = useState(false);
 	const [showPagination, setShowPagination] = useState(true);
 
-	// const fetchPosts = async () => {
-	// 	try {
-	// 		const res = await getPaginatedPosts(seletedPage, searchedPost);
+	const fetchPosts = async (signal) => {
+		try {
+			const res = await getPaginatedPosts(seletedPage, searchedPost, signal);
 
-	// 		if (searchedPost) {
-	// 			setSeletedPage(1);
-	// 			const filteredPost = res?.filter((post) =>
-	// 				post?.title?.includes(searchedPost)
-	// 			);
-	// 			setErrorMessage(filteredPost.length === 0);
-	// 			setData(filteredPost);
-	// 			setShowPagination(false);
-	// 		} else {
-	// 			setSearchedPost("");
-	// 			setShowPagination(true);
-	// 			setData(res);
-	// 			setErrorMessage(false);
-	// 		}
-	// 	} catch (error) {
-	// 		setErrorMessage(true);
-	// 		console.error("Error from posts: ", error);
-	// 	}
-	// };
+			if (searchedPost) {
+				setSeletedPage(1);
+				const filteredPost = res?.filter((post) =>
+					post?.title?.includes(searchedPost)
+				);
+				setErrorMessage(filteredPost.length === 0);
+				setData(filteredPost);
+				setShowPagination(false);
+			} else {
+				setSearchedPost("");
+				setShowPagination(true);
+				setData(res);
+				setErrorMessage(false);
+			}
+		} catch (error) {
+			setErrorMessage(true);
+			console.error("Error from posts: ", error);
+		}
+	};
 
 	const debouncedSearch = useDebounce(searchedPost, 2000);
 
-	const { status, data, error, isFetching } = usePostListing(
-		seletedPage,
-		debouncedSearch,
-		setDataList
-	);
+	// const { status, data, error, isFetching } = usePostListing(
+	// 	seletedPage,
+	// 	debouncedSearch,
+	// 	setDataList
+	// );
 
-	// const handleSearchedPost = _.debounce((e) => {
-	// 	let value = e.target.value;
-	// 	setSearchedPost(value);
-	// }, 2000);
+	useEffect(() => {
+		const controller = new AbortController();
+		const signal = controller.signal;
+		fetchPosts(signal);
+
+		return () => controller.abort();
+	}, [debouncedSearch, seletedPage]);
 
 	return (
 		<>
@@ -107,25 +109,25 @@ const Posts = ({ errorMessage, setErrorMessage }) => {
 				<input
 					placeholder="search by title"
 					value={searchedPost}
-					// onFocus={() => setShowPagination(false)}
-					// onBlur={() => setShowPagination(true)}
 					onChange={(e) => {
-						setShowPagination(false);
 						setSearchedPost(e.target.value);
+						setShowPagination(false);
+						setSeletedPage(1);
 					}}
 				/>
 			</div>
-			<Loader isLoading={isFetching}>
+			<Loader isLoading={data ? false : true}>
 				<div
 					className={`paginationWrapper ${
 						errorMessage ? "emptyList" : "postList"
 					}`}
 				>
-					{/* <Post data={data} setData={setData} errorMessage={errorMessage} /> */}
-					<Post data={dataList} setData={setDataList} errorMessage={error} />
+					{errorMessage && <h2>not found</h2>}
+					<Post data={data} setData={setData} errorMessage={errorMessage} />
+					{/* <Post data={dataList} setData={setDataList} errorMessage={error} /> */}
 				</div>
 
-				{!debouncedSearch && (
+				{showPagination && (
 					<Pagination
 						seletedPage={seletedPage}
 						setSelectedPage={setSeletedPage}

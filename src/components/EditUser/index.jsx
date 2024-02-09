@@ -6,12 +6,13 @@ import { userContext } from "../../App";
 import { validationSchema } from "../../utils/validationSchema";
 
 const EditUser = () => {
-	const { userData, setUserData, setFetchApi } = useContext(userContext);
+	const { userData, setUserData, setFetchAgain } = useContext(userContext);
 
 	const navigation = useNavigate();
 	const location = useLocation();
 
 	const handleFormSubmission = (values) => {
+		setFetchAgain(false);
 		const tempData = [...userData];
 		let filtered = userData?.find(
 			(item) => item?.id === location.state.user.id
@@ -27,8 +28,7 @@ const EditUser = () => {
 			name: values?.name,
 		};
 		setUserData(tempData);
-		setFetchApi(false);
-		navigation(-1);
+		navigation("/users");
 	};
 
 	const formik = useFormik({

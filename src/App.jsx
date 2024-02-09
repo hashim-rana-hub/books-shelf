@@ -2,72 +2,34 @@ import Header from "./components/header";
 import "./styles/styles.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
+import Users from "./components/Users";
 import EditPost from "./components/EditPost";
 import EditUser from "./components/EditUser";
 import { createContext, useEffect, useState } from "react";
+import { getUsers } from "./api";
 import PostsPerUser from "./components/PostsPerUser";
 import Posts from "./components/Posts/Posts";
-import Users from "./components/Users";
-import { getUsers } from "./api";
+import Loader from "./components/Loader";
 
 export const userContext = createContext(null);
 
 function App() {
 	const [userData, setUserData] = useState(null);
-	const [searched, setSearched] = useState("");
-	const [isLoading, setIsLoading] = useState(true);
-	const [errorMessage, setErrorMessage] = useState(false);
-	const [fetchApi, setFetchApi] = useState(true);
+	const [fetchAgain, setFetchAgain] = useState(true);
 
 	return (
 		<userContext.Provider
-			value={{ userData, setUserData, fetchApi, setFetchApi }}
+			value={{ userData, setUserData, fetchAgain, setFetchAgain }}
 		>
 			<BrowserRouter>
 				<Routes>
-					<Route
-						exact
-						path="/"
-						element={
-							<Home
-								setIsLoading={setIsLoading}
-								errorMessage={errorMessage}
-								setErrorMessage={setErrorMessage}
-							/>
-						}
-					/>
-					<Route
-						path="/users"
-						element={
-							<Users
-								searched={searched}
-								setSearched={setSearched}
-								setIsLoading={setIsLoading}
-								errorMessage={errorMessage}
-								setErrorMessage={setErrorMessage}
-							/>
-						}
-					/>
-					<Route
-						path="/posts/:userId"
-						element={
-							<PostsPerUser setIsLoading={setIsLoading} isLoading={isLoading} />
-						}
-					/>
+					<Route exact path="/" element={<Home />} />
+					<Route path="/posts/:userId" element={<PostsPerUser />} />
+					<Route path="/users" element={<Users />} />
 					<Route path="/edit-user/:userId" element={<EditUser />} />
 
 					<Route path="/edit-post/:postId" element={<EditPost />} />
-					<Route
-						path="/posts"
-						element={
-							<Posts
-								searched={searched}
-								setSearched={setSearched}
-								errorMessage={errorMessage}
-								setErrorMessage={setErrorMessage}
-							/>
-						}
-					/>
+					<Route path="/posts" element={<Posts />} />
 				</Routes>
 			</BrowserRouter>
 		</userContext.Provider>
