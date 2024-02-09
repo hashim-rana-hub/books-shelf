@@ -97,10 +97,10 @@ const Posts = () => {
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
-		fetchPosts(signal);
+		if (debouncedSearch || seletedPage) fetchPosts(signal);
 
 		return () => controller.abort();
-	}, [debouncedSearch, seletedPage]);
+	}, [seletedPage, debouncedSearch]);
 
 	return (
 		<>
