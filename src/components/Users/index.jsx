@@ -1,27 +1,24 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import Error from "../Error";
-import _, { debounce } from "lodash";
+
 import Header from "../header";
-import { useUsersList } from "../../hooks/useUsersList";
 import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
-import axios from "axios";
 import { getUsers } from "../../api";
 
 const Users = () => {
 	const navigate = useNavigate();
+	let time = new Date();
+	let id = `${time.getTime()}-${Math.floor(Math.random() * 1000)}`;
 
 	const { userData, setUserData, fetchAgain, setFetchAgain } =
 		useContext(userContext);
 
-	const [errorMessage, setErrorMessage] = useState(false);
 	const [searched, setSearched] = useState("");
 
 	const debouncedSearch = useDebounce(searched, 2000);
-
-	// const { status, data, error, isFetching } = useUsersList(debouncedSearch);
 
 	const handleEditUser = (user) => {
 		navigate(`/edit-user/${user?.id}`, {
@@ -33,6 +30,9 @@ const Users = () => {
 		let tempData = [...userData];
 		let filteredUsers = tempData?.filter((item) => item?.id !== user?.id);
 		setUserData(filteredUsers);
+	};
+	const handleAddUser = () => {
+		navigate("/add-user");
 	};
 
 	const fetchUsers = async (signal) => {
@@ -67,6 +67,11 @@ const Users = () => {
 					}}
 				/>
 			</div>
+			<div className="addUserWrapper">
+				<button className="addUser" onClick={handleAddUser}>
+					Add User
+				</button>
+			</div>
 			<Loader>
 				<div className="usersList">
 					{userData?.length === 0 && (
@@ -88,7 +93,7 @@ const Users = () => {
 							<h3>{user?.email}</h3>
 							<strong>{user?.phone}</strong>
 							<span>{user?.website}</span>
-							<Link to={`/posts/${user?.id}`}>See posts</Link>
+							<Link to={`/posts/${user?.id ?? id}`}>See posts</Link>
 						</div>
 					))}
 				</div>

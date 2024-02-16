@@ -1,15 +1,14 @@
-import Header from "./components/header";
 import "./styles/styles.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Users from "./components/Users";
 import EditPost from "./components/EditPost";
 import EditUser from "./components/EditUser";
-import { createContext, useEffect, useState } from "react";
-import { getUsers } from "./api";
+import { createContext, useState } from "react";
+
 import PostsPerUser from "./components/PostsPerUser";
 import Posts from "./components/Posts/Posts";
-import Loader from "./components/Loader";
+import AddUser from "./components/AddUser";
 
 export const userContext = createContext(null);
 
@@ -30,6 +29,7 @@ function App() {
 
 					<Route path="/edit-post/:postId" element={<EditPost />} />
 					<Route path="/posts" element={<Posts />} />
+					<Route path="/add-user" element={<AddUser />} />
 				</Routes>
 			</BrowserRouter>
 		</userContext.Provider>

@@ -19,10 +19,11 @@ export const getBookList = async ({ signal }) => {
 		throw error;
 	}
 };
-export const getuserPost = async () => {
+export const getuserPost = async (signal) => {
 	try {
 		const response = await axios.get(
-			`https://jsonplaceholder.typicode.com/posts/`
+			`https://jsonplaceholder.typicode.com/posts/`,
+			{ signal }
 		);
 		return response?.data;
 	} catch (error) {

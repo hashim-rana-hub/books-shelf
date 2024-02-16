@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import Comments from "../Comments";
 import Header from "../header";
 import Loader from "../Loader";
-import { useUserPosts } from "../../hooks/usePostListing";
+import Error from "../Error";
 
-const Post = ({ data, setData, error }) => {
+const Post = ({ data, setData, loading }) => {
 	const setPostHandler = (post, index) => {
 		const tempObj = post;
 		const newObj = { ...tempObj, seeComments: true };
@@ -18,7 +18,7 @@ const Post = ({ data, setData, error }) => {
 	return (
 		<>
 			<Header />
-			<Loader isLoading={data?.length > 0 ? false : true}>
+			<Loader isLoading={loading}>
 				{data?.map((post, index) => (
 					<div className="post" key={post?.id}>
 						<h3>{post.title}</h3>
@@ -29,43 +29,38 @@ const Post = ({ data, setData, error }) => {
 						{post?.seeComments ? <Comments postId={post?.id} /> : null}
 					</div>
 				))}
+				{data?.lenght === 0 && <Error message={"no posts yet"} />}
 			</Loader>
 		</>
 	);
 };
 
 const PostsPerUser = () => {
-	const { status, data, error, isFetching } = useUserPosts();
 	const [postsPerUser, setPostsPerUser] = useState(null);
+	const [loading, setLoading] = useState(true);
 	const { userId } = useParams();
 
-	// useEffect(() => {
-	// 	const userPosts = data?.filter((post) => post?.userId === parseInt(userId));
-	// 	setPostsPerUser(
-	// 		userPosts?.map((item) => ({
-	// 			...item,
-	// 			seeComments: false,
-	// 		}))
-	// 	);
-	// 	console.log("posts per user ", postsPerUser, "status", status);
-	// }, []);
+	const fetchPostsPerUser = async (signal) => {
+		try {
+			const result = await getuserPost(signal);
+			const posts = result?.filter((post) => post?.userId === parseInt(userId));
+			setPostsPerUser(posts ?? null);
+			setLoading(false);
+		} catch (error) {
+			console.log("error from post per user ", error?.message);
+		}
+	};
 
 	useEffect(() => {
-		if (status === "success") {
-			const userPosts = data.filter((post) => post.userId === parseInt(userId));
-			setPostsPerUser(
-				userPosts.map((item) => ({
-					...item,
-					seeComments: false,
-				}))
-			);
-			console.log("posts per user ", postsPerUser);
-		}
-	}, [status]);
+		const controller = new AbortController();
+		const signal = controller.signal;
+		fetchPostsPerUser(signal);
+		return () => controller.abort();
+	}, []);
 
 	return (
 		<div className="posts">
-			<Post data={postsPerUser} setData={setPostsPerUser} error={error} />
+			<Post data={postsPerUser} setData={setPostsPerUser} loading={loading} />
 		</div>
 	);
 };
