@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const getBookList = async ({ signal }) => {
-	console.log("signal ", signal);
 	try {
 		const response = await axios.get(
 			"https://api.nytimes.com/svc/books/v3/lists/full-overview.json",
