@@ -16,20 +16,16 @@ const Home = () => {
 
 	const activeFilterHandler = (item) => setActiveFilter(item?.list_name);
 
-	// const { status, data, error, isFetching } = useBooksList();
-
 	const fetchList = async (signal) => {
 		try {
 			setIsLoading(true);
 			const results = await getBookList({ signal });
 			if (results?.status === "OK") {
 				setData(results?.results);
-				// setIsLoading(false);
 				setActiveFilter(results?.results.lists[0]?.list_name);
 			}
 		} catch (error) {
 			if (!axios.isCancel(error)) {
-				// setIsLoading(false);
 				setErrorMessage(true);
 				console.error("Component Error:", error.message);
 			}
