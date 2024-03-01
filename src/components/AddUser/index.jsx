@@ -6,6 +6,7 @@ import { userContext } from "../../App";
 import { validationAddUserSchema } from "../../utils/validationSchema";
 import { useId } from "react";
 import { USERS } from "../../utils/routeConstants";
+import { getAddUserInitialValues } from "../../utils/dataHelpers";
 
 const AddUser = () => {
 	const { userData, setUserData, setFetchAgain } = useContext(userContext);
@@ -22,13 +23,7 @@ const AddUser = () => {
 	};
 
 	const formik = useFormik({
-		initialValues: {
-			username: "",
-			name: "",
-			email: "",
-			phone: "",
-			website: "",
-		},
+		initialValues: getAddUserInitialValues,
 		validationSchema: validationAddUserSchema,
 		onSubmit: handleFormSubmission,
 	});

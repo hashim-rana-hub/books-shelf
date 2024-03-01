@@ -10,3 +10,18 @@ export const getPages = [
 	{ id: 9, page: 9 },
 	{ id: 10, page: 10 },
 ];
+
+export const getEditUserInitialValues = (location) => ({
+	name: location.state.user.name,
+	email: location.state.user.email,
+	phone: location.state.user.phone,
+	website: location.state.user.website,
+});
+
+export const getAddUserInitialValues = {
+	username: "",
+	name: "",
+	email: "",
+	phone: "",
+	website: "",
+};

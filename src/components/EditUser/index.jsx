@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import { validationSchema } from "../../utils/validationSchema";
 import { USERS } from "../../utils/routeConstants";
+import { getEditUserInitialValues } from "../../utils/dataHelpers";
 
 const EditUser = () => {
 	const { userData, setUserData, setFetchAgain } = useContext(userContext);
@@ -33,12 +34,7 @@ const EditUser = () => {
 	};
 
 	const formik = useFormik({
-		initialValues: {
-			name: location.state.user.name,
-			email: location.state.user.email,
-			phone: location.state.user.phone,
-			website: location.state.user.website,
-		},
+		initialValues: getEditUserInitialValues(location),
 		validationSchema: validationSchema,
 		onSubmit: handleFormSubmission,
 	});
