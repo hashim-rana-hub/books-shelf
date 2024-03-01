@@ -7,6 +7,7 @@ import Header from "../header";
 import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
 import { getUsers } from "../../api";
+import { ADD_USER, EDIT_USER } from "../../utils/routeConstants";
 
 const Users = () => {
 	const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Users = () => {
 	const debouncedSearch = useDebounce(searched, 2000);
 
 	const handleEditUser = (user) => {
-		navigate(`/edit-user/${user?.id}`, {
+		navigate(`${EDIT_USER}${user?.id}`, {
 			state: { user },
 		});
 	};
@@ -32,7 +33,7 @@ const Users = () => {
 		setUserData(filteredUsers);
 	};
 	const handleAddUser = () => {
-		navigate("/add-user");
+		navigate(ADD_USER);
 	};
 
 	const fetchUsers = async (signal) => {

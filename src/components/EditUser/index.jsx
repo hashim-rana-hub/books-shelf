@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import { validationSchema } from "../../utils/validationSchema";
+import { USERS } from "../../utils/routeConstants";
 
 const EditUser = () => {
 	const { userData, setUserData, setFetchAgain } = useContext(userContext);
@@ -28,7 +29,7 @@ const EditUser = () => {
 			name: values?.name,
 		};
 		setUserData(tempData);
-		navigation("/users");
+		navigation(USERS);
 	};
 
 	const formik = useFormik({

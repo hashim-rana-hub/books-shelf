@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../../App";
 import { validationAddUserSchema } from "../../utils/validationSchema";
 import { useId } from "react";
+import { USERS } from "../../utils/routeConstants";
 
 const AddUser = () => {
 	const { userData, setUserData, setFetchAgain } = useContext(userContext);
@@ -15,10 +16,9 @@ const AddUser = () => {
 		let time = new Date();
 		let id = `${time.getTime()}-${Math.floor(Math.random() * 1000)}`;
 		const newUser = { ...values, userId: parseInt(id) };
-		console.log("new user ", newUser);
 		setUserData([...userData, newUser]);
 		setFetchAgain(false);
-		navigation("/users");
+		navigation(USERS);
 	};
 
 	const formik = useFormik({
