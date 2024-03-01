@@ -80,7 +80,7 @@ const Posts = () => {
 		const controller = new AbortController();
 		const signal = controller.signal;
 		fetchPosts(signal);
-
+		if (searchedPost) setSeletedPage(1);
 		return () => controller.abort();
 	}, [seletedPage, debouncedSearch]);
 
