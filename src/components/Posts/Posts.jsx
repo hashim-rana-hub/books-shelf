@@ -76,6 +76,11 @@ const Posts = () => {
 
 	const debouncedSearch = useDebounce(searchedPost, 500);
 
+	const handlePostSearch = (e) => {
+		setSearchedPost(e.target.value);
+		setShowPagination(false);
+	};
+
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -91,10 +96,7 @@ const Posts = () => {
 				<input
 					placeholder="search by title"
 					value={searchedPost}
-					onChange={(e) => {
-						setSearchedPost(e.target.value);
-						setShowPagination(false);
-					}}
+					onChange={handlePostSearch}
 				/>
 			</div>
 			<Loader isLoading={data ? false : true}>

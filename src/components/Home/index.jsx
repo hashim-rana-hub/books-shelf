@@ -20,10 +20,9 @@ const Home = () => {
 		try {
 			setIsLoading(true);
 			const results = await getBookList({ signal });
-			if (results?.status === "OK") {
-				setData(results?.results);
-				setActiveFilter(results?.results.lists[0]?.list_name);
-			}
+			if (results?.status !== "OK") return;
+			setData(results?.results);
+			setActiveFilter(results?.results.lists[0]?.list_name);
 		} catch (error) {
 			if (!axios.isCancel(error)) {
 				setErrorMessage(true);
@@ -39,9 +38,7 @@ const Home = () => {
 		const signal = controller.signal;
 		fetchList(signal);
 
-		return () => {
-			controller.abort();
-		};
+		return () => controller.abort();
 	}, []);
 
 	return (

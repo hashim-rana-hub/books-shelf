@@ -50,9 +50,7 @@ const Users = () => {
 		const signal = controller.signal;
 		if (fetchAgain) fetchUsers(signal);
 
-		return () => {
-			controller.abort();
-		};
+		return () => controller.abort();
 	}, [debouncedSearch]);
 
 	return (

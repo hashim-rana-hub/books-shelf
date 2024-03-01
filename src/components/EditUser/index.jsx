@@ -16,14 +16,14 @@ const EditUser = () => {
 	const handleFormSubmission = (values) => {
 		setFetchAgain(false);
 		const tempData = [...userData];
-		let filtered = userData?.find(
+		let targetUser = userData?.find(
 			(item) => item?.id === location.state.user.id
 		);
-		let indexOfFilteredUser = userData?.findIndex(
-			(item) => item?.id === filtered?.id
+		let indexOfTargetedUser = userData?.findIndex(
+			(item) => item?.id === targetUser?.id
 		);
-		tempData[indexOfFilteredUser] = {
-			...tempData[indexOfFilteredUser],
+		tempData[indexOfTargetedUser] = {
+			...tempData[indexOfTargetedUser],
 			email: values?.email,
 			phone: values?.phone,
 			website: values?.website,
