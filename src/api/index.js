@@ -78,6 +78,13 @@ export const getPaginatedPosts = async (page, title, signal) => {
 		}${title ? `&title=${title}` : ``}`;
 
 		const response = await axios.get(POST_BASE_URL, { signal });
+		//TODO:axios params cant be used because api restricts to append in url
+		// let POST_BASE_URL = `https://jsonplaceholder.typicode.com/posts/`;
+		// const response = await axios.get(POST_BASE_URL, {
+		// 	_page: page ?? "",
+		// 	title: title,
+		// 	signal: signal,
+		// });
 
 		return response?.data;
 	} catch (error) {
