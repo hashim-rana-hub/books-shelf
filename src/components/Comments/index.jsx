@@ -6,19 +6,6 @@ import Loader from "../Loader";
 
 const Comments = ({ postId }) => {
 	const [comments, setComments] = useState();
-
-	// const fetchComments = async () => {
-	// 	try {
-	// 		const res = await getCommentsPerPost(postId);
-	// 		setComments(res);
-	// 	} catch (err) {
-	// 		console.error("Error fetching comments:", err);
-	// 	}
-	// };
-
-	// useEffect(() => {
-	// 	fetchComments();
-	// }, [postId]);
 	const { status, data, error, isFetching } = useCommentsList(postId);
 
 	return (
