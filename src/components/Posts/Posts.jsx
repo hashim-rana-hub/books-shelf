@@ -81,6 +81,8 @@ const Posts = () => {
 		setShowPagination(false);
 	};
 
+	const conditionalClass = data?.length === 0 ? "emptyList" : "postList";
+
 	useEffect(() => {
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -100,10 +102,7 @@ const Posts = () => {
 				/>
 			</div>
 			<Loader isLoading={data ? false : true}>
-				<div
-					className={`paginationWrapper 
-					 ${data?.length === 0 ? "emptyList" : "postList"}`}
-				>
+				<div className={`paginationWrapper ${conditionalClass}`}>
 					{data?.length === 0 && <Error message={" not found"} />}
 					<Post data={data} setData={setData} />
 				</div>

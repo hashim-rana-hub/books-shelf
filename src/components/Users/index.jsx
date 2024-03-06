@@ -7,7 +7,7 @@ import Header from "../header";
 import Loader from "../Loader";
 import { useDebounce } from "../../hooks/useDebounce";
 import { getUsers } from "../../api";
-import { ADD_USER, EDIT_USER } from "../../utils/routeConstants";
+import { ADD_USER, EDIT_USER, POSTS } from "../../utils/routeConstants";
 
 const Users = () => {
 	const navigate = useNavigate();
@@ -92,7 +92,7 @@ const Users = () => {
 							<h3>{user?.email}</h3>
 							<strong>{user?.phone}</strong>
 							<span>{user?.website}</span>
-							<Link to={`/posts/${user?.id ?? id}`}>See posts</Link>
+							<Link to={`${POSTS}/${user?.id ?? id}`}>See posts</Link>
 						</div>
 					))}
 				</div>

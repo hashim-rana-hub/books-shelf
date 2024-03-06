@@ -1,14 +1,14 @@
 import React from "react";
 import { ClipLoader } from "react-spinners";
 
-const Loader = ({ isLoading, children }) => {
+const Loader = ({ isLoading, children, small = false }) => {
 	return (
 		<>
 			{isLoading ? (
 				<div className="overlay">
 					<ClipLoader
 						loading={isLoading}
-						size={150}
+						size={small ? 20 : 150}
 						aria-label="Loading Spinner"
 						data-testid="loader"
 					/>

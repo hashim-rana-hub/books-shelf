@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Loader from "../Loader";
+import { POSTS, USERS } from "../../utils/routeConstants";
 
 function Header() {
 	return (
@@ -10,10 +10,10 @@ function Header() {
 				<nav className="links">
 					<ul>
 						<li>
-							<Link to={"/users"}>Users</Link>
+							<Link to={USERS}>Users</Link>
 						</li>
 						<li>
-							<Link to={"/posts"}>Posts</Link>
+							<Link to={POSTS}>Posts</Link>
 						</li>{" "}
 						<li>
 							<Link>About</Link>
