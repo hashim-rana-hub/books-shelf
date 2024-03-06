@@ -1,15 +1,20 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { getPaginatedPosts } from "../../api";
 import Comments from "../Comments";
 import { getPages } from "../../utils/dataHelpers";
+import _ from "lodash";
+import Error from "../Error";
+import Header from "../header";
+import Loader from "../Loader";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const Post = ({ data, setData }) => {
-	const setPostHandler = (post, index) => {
-		const tempObj = post;
-		const newObj = { ...tempObj, seeComments: true };
-		let newArray = [...data];
-		newArray[index] = { ...newObj };
-		setData(newArray);
+	const handleShowComments = (post, index) => {
+		const posts = data?.map((item, i) => ({
+			...item,
+			seeComments: i === index ? !post?.seeComments : false,
+		}));
+		setData(posts);
 	};
 
 	return (
@@ -18,7 +23,7 @@ const Post = ({ data, setData }) => {
 				<div className="post" key={post?.id}>
 					<h3>{post.title}</h3>
 					<p>{post?.body}</p>
-					<button onClick={() => setPostHandler(post, index)}>
+					<button onClick={() => handleShowComments(post, index)}>
 						{post?.seeComments ? "hide comments" : "see comments"}
 					</button>
 					{post?.seeComments ? <Comments postId={post?.id} /> : null}
@@ -53,40 +58,62 @@ const Posts = () => {
 	const [data, setData] = useState();
 	const [searchedPost, setSearchedPost] = useState("");
 	const [seletedPage, setSeletedPage] = useState(1);
+	const [showPagination, setShowPagination] = useState(true);
 
-	const fetchPosts = async () => {
-		const data = await getPaginatedPosts(seletedPage, searchedPost);
-		if (searchedPost) {
-			setSeletedPage(undefined);
-			const filteredPost = data?.filter((post) =>
+	const fetchPosts = async (signal) => {
+		try {
+			const res = await getPaginatedPosts(seletedPage, searchedPost, signal);
+			const filteredPost = res?.filter((post) =>
 				post?.title?.includes(searchedPost)
 			);
 
 			setData(filteredPost);
-		} else setData(data);
+			setShowPagination(!searchedPost ? true : false);
+		} catch (error) {
+			console.error("Error from posts: ", error);
+		}
 	};
 
-	const handleSearchedPost = (e) => {
+	const debouncedSearch = useDebounce(searchedPost, 500);
+
+	const handlePostSearch = (e) => {
 		setSearchedPost(e.target.value);
+		setShowPagination(false);
 	};
+
+	const conditionalClass = data?.length === 0 ? "emptyList" : "postList";
 
 	useEffect(() => {
-		fetchPosts();
-	}, [seletedPage, searchedPost]);
+		const controller = new AbortController();
+		const signal = controller.signal;
+		fetchPosts(signal);
+		if (searchedPost) setSeletedPage(1);
+		return () => controller.abort();
+	}, [seletedPage, debouncedSearch]);
 
 	return (
 		<>
+			<Header />
 			<div className="searchWrapper">
 				<input
 					placeholder="search by title"
 					value={searchedPost}
-					onChange={handleSearchedPost}
+					onChange={handlePostSearch}
 				/>
 			</div>
-			<div className="paginationWrapper">
-				<Post data={data} setData={setData} />
-			</div>
-			<Pagination seletedPage={seletedPage} setSelectedPage={setSeletedPage} />
+			<Loader isLoading={data ? false : true}>
+				<div className={`paginationWrapper ${conditionalClass}`}>
+					{data?.length === 0 && <Error message={" not found"} />}
+					<Post data={data} setData={setData} />
+				</div>
+
+				{showPagination && !searchedPost && (
+					<Pagination
+						seletedPage={seletedPage}
+						setSelectedPage={setSeletedPage}
+					/>
+				)}
+			</Loader>
 		</>
 	);
 };
