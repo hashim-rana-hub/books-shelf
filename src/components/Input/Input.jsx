@@ -6,6 +6,8 @@ const Input = ({
 	handleChange,
 	error,
 	disabled,
+	name,
+	placeholder,
 }) => {
 	return (
 		<div className="formElement">
@@ -17,10 +19,11 @@ const Input = ({
 					<input
 						type={type || "text"}
 						id={label}
-						name={label}
+						name={name}
 						onChange={handleChange}
 						value={value}
 						disabled={disabled}
+						placeholder={placeholder}
 					/>
 					{error && <p>{error}</p>}
 				</div>
